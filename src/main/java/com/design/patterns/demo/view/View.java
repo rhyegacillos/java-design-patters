@@ -17,6 +17,7 @@ public class View extends JFrame implements ActionListener {
     private JButton okButton;
     private JTextField nameField;
     private JPasswordField passField;
+    private JPasswordField repeatPassField;
     private LoginListener loginListener;
 
     public View(Model model) {
@@ -27,72 +28,99 @@ public class View extends JFrame implements ActionListener {
         passField = new JPasswordField(10);
         okButton = new JButton("OK");
 
+        setLayout(new GridBagLayout());
+
+        GridBagConstraints gc = new GridBagConstraints();
+        gc.anchor = GridBagConstraints.LAST_LINE_END;
+        gc.gridx = 1;
+        gc.gridy = 1;
+        gc.weightx = 1;
+        gc.weighty = 1;
+        gc.insets = new Insets(100, 0, 0, 10);
+        gc.fill = GridBagConstraints.NONE;
+
+        add(new JLabel("Name: "), gc);
+
+        gc.anchor = GridBagConstraints.LAST_LINE_START;
+        gc.gridx = 2;
+        gc.gridy = 1;
+        gc.weightx = 1;
+        gc.weighty = 1;
+        gc.insets = new Insets(100, 0, 0, 0);
+        gc.fill = GridBagConstraints.NONE;
+
+        add(nameField, gc);
+
+        gc.anchor = GridBagConstraints.LINE_END;
+        gc.gridx = 1;
+        gc.gridy = 2;
+        gc.weightx = 1;
+        gc.weighty = 1;
+        gc.insets = new Insets(0, 0, 0, 10);
+        gc.fill = GridBagConstraints.NONE;
+
+        add(new JLabel("Password: "), gc);
+
+        gc.anchor = GridBagConstraints.LINE_START;
+        gc.gridx = 2;
+        gc.gridy = 2;
+        gc.weightx = 1;
+        gc.weighty = 1;
+        gc.insets = new Insets(0, 0, 0, 0);
+        gc.fill = GridBagConstraints.NONE;
+
+        add(passField, gc);
+
+        gc.anchor = GridBagConstraints.LINE_END;
+        gc.gridx = 1;
+        gc.gridy = 3;
+        gc.weightx = 1;
+        gc.weighty = 1;
+        gc.insets = new Insets(0, 0, 0, 10);
+        gc.fill = GridBagConstraints.NONE;
+
+        add(new JLabel("Repeat password: "), gc);
+
+        gc.anchor = GridBagConstraints.LINE_START;
+        gc.gridx = 2;
+        gc.gridy = 3;
+        gc.weightx = 1;
+        gc.weighty = 1;
+        gc.insets = new Insets(0, 0, 0, 0);
+        gc.fill = GridBagConstraints.NONE;
+
+        add(repeatPassField, gc);
+
+        gc.anchor = GridBagConstraints.FIRST_LINE_START;
+        gc.gridx = 2;
+        gc.gridy = 4;
+        gc.weightx = 1;
+        gc.weighty = 100;
+        gc.fill = GridBagConstraints.NONE;
+
+        add(okButton, gc);
+
+        okButton.addActionListener(this);
 
         addWindowListener(new WindowAdapter() {
+
             @Override
             public void windowOpened(WindowEvent e) {
-                Database.getInstance().connect();
+                try {
+                    Database.getInstance().connect();
+                } catch (Exception e1) {
+                    JOptionPane.showMessageDialog(View.this, "Unable to connect to database.",
+                            "Error", JOptionPane.WARNING_MESSAGE);
+                    e1.printStackTrace();
+                }
             }
 
             @Override
             public void windowClosing(WindowEvent e) {
                 Database.getInstance().disconnect();
             }
+
         });
-
-        setLayout(new GridBagLayout());
-
-        GridBagConstraints gc = new GridBagConstraints();
-        gc.anchor = GridBagConstraints.LAST_LINE_END;
-        gc.gridx=1;
-        gc.gridy=1;
-        gc.weightx=1;
-        gc.weighty=1;
-        gc.insets = new Insets(100, 0, 0, 10);
-        gc.fill=GridBagConstraints.NONE;
-
-        add(new JLabel("Name: "), gc);
-
-        gc.anchor = GridBagConstraints.LAST_LINE_START;
-        gc.gridx=2;
-        gc.gridy=1;
-        gc.weightx=1;
-        gc.weighty=1;
-        gc.insets = new Insets(100, 0, 0, 0);
-        gc.fill=GridBagConstraints.NONE;
-
-        add(nameField, gc);
-
-        gc.anchor = GridBagConstraints.LINE_END;
-        gc.gridx=1;
-        gc.gridy=2;
-        gc.weightx=1;
-        gc.weighty=1;
-        gc.insets = new Insets(0, 0, 0, 10);
-        gc.fill=GridBagConstraints.NONE;
-
-        add(new JLabel("Password: "), gc);
-
-        gc.anchor = GridBagConstraints.LINE_START;
-        gc.gridx=2;
-        gc.gridy=2;
-        gc.weightx=1;
-        gc.weighty=1;
-        gc.insets = new Insets(0, 0, 0, 0);
-        gc.fill=GridBagConstraints.NONE;
-
-        add(passField, gc);
-
-        gc.anchor = GridBagConstraints.FIRST_LINE_START;
-        gc.gridx=2;
-        gc.gridy=3;
-        gc.weightx=1;
-        gc.weighty=100;
-        gc.fill=GridBagConstraints.NONE;
-
-        add(okButton, gc);
-
-        okButton.addActionListener(this);
 
         setSize(600, 500);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -101,16 +129,23 @@ public class View extends JFrame implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         String password = new String(passField.getPassword());
-        String name = nameField.getText();
+        String repeat = new String(repeatPassField.getPassword());
 
-        loginEvent(new LoginFormEvent(name, password));
+        if (password.equals(repeat)) {
+            String name = nameField.getText();
+
+            loginEvent(new LoginFormEvent(name, password));
+        } else {
+            JOptionPane.showMessageDialog(this, "Passwords do not match.",
+                    "Error", JOptionPane.WARNING_MESSAGE);
+        }
     }
 
     public void setLoginListener(LoginListener loginListener) {
         this.loginListener = loginListener;
     }
 
-    public void loginEvent(LoginFormEvent event){
+    public void loginEvent(LoginFormEvent event) {
         if (loginListener != null) {
             loginListener.loginPerformed(event);
         }
