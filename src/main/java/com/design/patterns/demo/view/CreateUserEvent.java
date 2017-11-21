@@ -1,10 +1,10 @@
 package com.design.patterns.demo.view;
 
-public class LoginFormEvent {
+public class CreateUserEvent {
     private String name;
     private String password;
 
-    public LoginFormEvent(String name, String password) {
+    public CreateUserEvent(String name, String password) {
         this.name = name;
         this.password = password;
     }

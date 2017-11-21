@@ -29,6 +29,6 @@ public class App
 
         Controller controller = new Controller(model, view);
 
-        view.setLoginListener(controller);
+        view.setCreateUserListener(controller);
     }
 }
