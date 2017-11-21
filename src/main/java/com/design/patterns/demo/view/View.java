@@ -1,12 +1,15 @@
 package com.design.patterns.demo.view;
 
 import com.design.patterns.demo.controller.Controller;
+import com.design.patterns.demo.model.Database;
 import com.design.patterns.demo.model.Model;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class View extends JFrame implements ActionListener {
 
@@ -23,6 +26,19 @@ public class View extends JFrame implements ActionListener {
         nameField = new JTextField(10);
         passField = new JPasswordField(10);
         okButton = new JButton("OK");
+
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+                Database.getInstance().connect();
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                Database.getInstance().disconnect();
+            }
+        });
 
         setLayout(new GridBagLayout());
 
