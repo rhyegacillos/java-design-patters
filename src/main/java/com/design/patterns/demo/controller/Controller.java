@@ -1,5 +1,6 @@
 package com.design.patterns.demo.controller;
 
+import com.design.patterns.demo.model.DAOFactory;
 import com.design.patterns.demo.model.Model;
 import com.design.patterns.demo.model.Person;
 import com.design.patterns.demo.model.PersonDao;
@@ -14,7 +15,7 @@ public class Controller implements CreateUserListener {
     private  Model model;
     private View view;
 
-    private PersonDao personDao = new PersonDao();
+    private PersonDao personDao = DAOFactory.getPersonDao();
 
     public Controller(Model model, View view) {
         this.model = model;

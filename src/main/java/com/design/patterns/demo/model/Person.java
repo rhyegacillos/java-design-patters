@@ -14,6 +14,12 @@ public class Person {
 		this.password = password;
 	}
 
+	public Person(int id, String name, String password) {
+		this.id = id;
+		this.name = name;
+		this.password = password;
+	}
+
 	public int getId() {
 		return id;
 	}
