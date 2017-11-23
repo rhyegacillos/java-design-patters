@@ -6,6 +6,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
+
 public class PersonDaoTest {
 
     public PersonDao dao;
@@ -27,15 +28,15 @@ public class PersonDaoTest {
 
         dao = DAOFactory.getPersonDao();
 
-//        dao.deleteAll();
+        dao.deleteAll();
 
     }
 
 
     @Test
     public void addPerson() throws Exception {
-//        dao = DAOFactory.getPersonDao();
-//
+        //dao = DAOFactory.getPersonDao();
+
 //        Person person1 = new Person("Bob", "Bob1");
 //        Person person2 = new Person("Danny", "Danny4");
 //
