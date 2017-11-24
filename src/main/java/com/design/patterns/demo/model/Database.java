@@ -18,7 +18,10 @@ public class Database {
         return instance;
     }
 
+
+
     public Connection getCon() {
+
         return con;
     }
 
