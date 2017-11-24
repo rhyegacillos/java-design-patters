@@ -1,21 +1,15 @@
 package com.design.patterns.demo.controller;
 
-import com.design.patterns.demo.model.DAOFactory;
-import com.design.patterns.demo.model.Model;
-import com.design.patterns.demo.model.Person;
-import com.design.patterns.demo.model.PersonDao;
-import com.design.patterns.demo.view.CreateUserEvent;
-import com.design.patterns.demo.view.CreateUserListener;
-import com.design.patterns.demo.view.View;
+import com.design.patterns.demo.model.*;
+import com.design.patterns.demo.view.*;
 
 import java.sql.SQLException;
 
-public class Controller implements CreateUserListener {
+public class Controller implements CreateUserListener, SaveListener,
+        AppListener {
 
     private  Model model;
     private View view;
-
-    private PersonDao personDao = DAOFactory.getPersonDao();
 
     public Controller(Model model, View view) {
         this.model = model;
@@ -25,6 +19,10 @@ public class Controller implements CreateUserListener {
 
     public void userCreated(CreateUserEvent event) {
 
+        DAOFactory factory = DAOFactory.getFactory(DAOFactory.MYSQL);
+
+        PersonDao personDao = factory.getPersonDao();
+
         String name = event.getName();
         String password = event.getPassword();
         try {
@@ -33,5 +31,34 @@ public class Controller implements CreateUserListener {
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public void onSave() {
+        try {
+            model.save();
+        } catch (Exception e) {
+            view.showError("Error saving to database.");
+        }
+    }
+
+    @Override
+    public void onOpen() {
+        try {
+            Database.getInstance().connect();
+        } catch (Exception e) {
+            view.showError("Cannot connect to database.");
+        }
+
+        try {
+            model.load();
+        } catch (Exception e) {
+            view.showError("Error loading data from database.");
+        }
+    }
+
+    @Override
+    public void onClose() {
+        Database.getInstance().disconnect();
     }
 }

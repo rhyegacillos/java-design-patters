@@ -2,14 +2,10 @@ package com.design.patterns.demo.model;
 
 import org.junit.*;
 
-import java.util.List;
-
-import static org.junit.Assert.*;
-
 
 public class PersonDaoTest {
 
-    public PersonDao dao;
+    public MySQLPersonDao dao;
 
     @BeforeClass
     public static void setBeforeClass() throws Exception {
@@ -26,9 +22,9 @@ public class PersonDaoTest {
     @Before
     public void setUp() throws Exception {
 
-        dao = DAOFactory.getPersonDao();
-
-        dao.deleteAll();
+//        dao = MySQLDAOFactory.getPersonDao();
+//
+//        dao.deleteAll();
 
     }
 
@@ -51,6 +47,7 @@ public class PersonDaoTest {
 
     }
 
+    @Ignore
     @Test
     public void getPerson() throws Exception {
     }
